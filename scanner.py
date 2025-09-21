@@ -35,6 +35,7 @@ class Scanner:
             case '+': self.add_token(Token_type.PLUS)
             case ';': self.add_token(Token_type.SEMICOLON)
             case '*': self.add_token(Token_type.STAR)
+
             case '!': self.add_token(Token_type.BANG_EQUAL if self.check() else Token_type.BANG)
             case '=': self.add_token(Token_type.EQUAL_EQUAL if self.check() else Token_type.EQUAL)
             case '<': self.add_token(Token_type.LESS_EQUAL if self.check() else Token_type.LESS)
@@ -43,6 +44,12 @@ class Scanner:
             case '/':
                 if self.check(expected='/'):
                     while self.peek() != '\n' and not self.is_at_end(): self.advance()
+                elif self.check(expected='*'):
+                    while self.peek() != '*' and self.peek_next() != '/' and not self.is_at_end():
+                        if self.peek() == '\n': self.line += 1
+                        self.advance()
+                    self.advance()
+                    self.advance()
                 else:
                     self.add_token(Token_type.SLASH)
 
